@@ -1,0 +1,192 @@
+{% extends "invoice/base.html"%}
+{% load static %}
+{% block content %}
+
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-file-text-o"></i>Tax Invoice</h1>
+          <p>Saved Invoice from the database</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item"><a href="#">Invoice</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-14">
+        <nav class="navbar navbar-light bg-light">
+
+         <form>
+         </form>
+            <form class="form-inline" method="POST" action="">
+
+              <a href="{% url 'update_invoice' object.id%}" class="btn btn-outline-success" type="button">Edit</a>&nbsp;
+              <!--<button type="button" class="btn btn-outline-danger " data-toggle="modal" data-target="#DeleteInvoice">Delete Invoice</button>&nbsp;-->
+
+              <button type="button" class="btn btn-outline-danger " data-toggle="modal" data-target="#DeleteInvoice">Delete Invoice</button>&nbsp;
+            
+              <a class="btn btn-outline-secondary" href="/"><i class="fa fa-fw fa-lg fa-times-circle"></i>Back</a>
+          </form>
+          <form method="POST" action="#">
+           <a class="btn btn-outline-secondary" href="{% url 'invoice_pdf' object.id%}"><i class="glyphicon glyphicon-save"></i>Download firstVersion Tax Invoice</a>&nbsp;
+          </form>
+          <form method="POST" action="#">
+            <a class="btn btn-outline-warning" href="{% url 'invoice_pdf2' object.id%}">Download SecondVersion Tax Invoice</a>&nbsp;
+          </form>
+        </nav>
+        </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <form id="saveInvoice" method="POST" action="">
+            <section class="invoice">
+              <div class="row mb-4">
+                <div class="col-12">
+                  <h2 class="page-header"><img style="border-radius: 50%; height: 80px;width: 80px;margin-right: 12px; margin-bottom: 08px;" src="{% static '/images/image1(2).jpeg' %}"> KAMAHORO,KIBOOME&KIRUNDA ADVOCATES</h2>
+                </div>
+                <div class="col-6">
+                  <h5 class="text-right">TAX INVOICE</h5>
+                  <h6 class="text-right">Tax Invoice Number:&nbsp;&nbsp;&nbsp;{{object.vat}}</h6>
+                </div>
+
+              </div>
+
+              <div class="row invoice-info">
+                <div class="col-4">Location
+                  <address>1st Floor Block A-UAP<br><strong>Nakawa Business Park</strong><br>Plot 3-5 Portbell Road<br>P.O.Box:&nbsp;27892 Kampala<br>Email:&nbsp;&nbsp;&nbsp;canaanadvocates@gmail.com<br>Telephone:&nbsp;&nbsp;(+256)-394-836-201</address>
+                </div>
+                <div class="col-4">To
+                  <address><strong>{{object.name_to}}.</strong><br>{% if object.company_name == '' %}{% else%}{{object.company_name}}{% endif %}<br>{{object.address_to}}<br>{% if object.email_to == '' %}{% else%}Email:&nbsp;&nbsp;&nbsp;{{object.email_to}}{% endif %}<br>{% if object.telephone_to == '' %}{% else%}Phone: &nbsp;&nbsp;&nbsp;{{object.telephone_to }}{% endif %}<br>{% if object.box_number_to == '' %}{% else%}P.0.Box&nbsp;&nbsp;{{object.box_number_to}} {% endif %}</address>
+                </div>
+                <div class="col-4"><strong>Our Ref:{{ object.ref_nwumber }}</strong><br>Issue Date: {{ object.issue_date }}<br>Payment Terms:&nbsp;&nbsp;{{object.terms }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th colspan="2">Professional fees/&nbsp;ug.Shs</th>
+                        <th colspan="2">Disbursements/&nbsp;ug.Shs</th>
+                        <th>GrandTotal/&nbsp;ug.Shs</th>
+                      </tr>
+                    </thead>
+                    <tbody>   
+                        <tr>
+                          <td>
+                            {% for myItem in object.lineItem.all %}
+                            <ul type ="circle">
+                              <li>{{myItem.prof_heading }}
+                                <ol>
+                       
+                                        <li>{{myItem.prof_sub1}}</li>
+
+                                        <li>{{myItem.prof_sub2}}</li>
+                         
+                              
+                                        <li>{{myItem.prof_sub3}}</li>
+                           
+                                  
+                                        <li>{{myItem.prof_sub4}}</li>
+                                  
+                              
+                                        <li>{{myItem.prof_sub5}}</li>
+                               
+                                </ol>
+                              </li>
+                              
+                            </ul>
+                         {% endfor %}
+                           </td>
+                            <td><br><br><br><br>{{object.professional_amount}}&nbsp;/=</td>
+                        <td>
+                          {% for dbmt in object.disbursement.all %} 
+                          <ul type = "circle">
+                            <li>{{dbmt.disb_heading}} 
+                              <ol>
+                              
+                               <li>{{dbmt.disb_sub1}}</li>
+                                 
+                              
+                               <li>{{dbmt.disb_sub2}}</li>
+                              
+                               <li>{{dbmt.disb_sub3}}</li>
+                             
+                               </ol>
+                            </li>
+                           </ul>
+                             {% endfor %}
+                         </td>
+ 
+                           <td>
+                             {% for dbmt in object.disbursement.all %} 
+                            
+                             <br><br>
+                             {{dbmt.disbursement_amount}}&nbsp;/=       
+                             {% endfor %}
+                           </td>
+                           </tr>
+                          <tr>
+                              <td>To 18% VAT</td>
+                              <td>{{VAT}}&nbsp;/=</td>
+                              <td colspan="2"></td>
+                              
+                          </tr>
+                          <tr>
+                            <td>SubTotal</td>
+                            <td>{{subtotal_pr}}&nbsp;/=</td>
+                            <td>SubTotal</td>
+                            <td>{{subtotal_db}}&nbsp;/=</td>
+                            <td>{{grandtotal}}&nbsp;/=</td>
+                          </tr>
+						
+					 </tbody>
+          </table>
+					 <!-- ending trial-->
+              </div>
+              <div class="container px-4">
+                <div class="row gx-5">
+                  <div class="col">
+                    
+                  </div>
+                  <div class="col">
+                    TIN:&nbsp;&nbsp;&nbsp;1017550332 <br>
+                  </div>
+                  <div class="col">
+                    <div>Grandtotal:&nbsp;&nbsp;{{grandtotal}}&nbsp;USh</div>
+             
+                  </div>
+                </div>
+              </div>
+            </section>
+          </form>
+          <div class="col-10">
+            <h6><span>Bank:&nbsp;{{object.bank }}</span>&nbsp;<span>{{object.bank_branch }}</span>/&nbsp;&nbsp;<span></span><span>swift code:&nbsp;&nbsp;{{object.swift_code }}</span>/&nbsp;&nbsp;<span>Account No:&nbsp;&nbsp; {{object.account_number}}</span></h6>
+            ISSUED BY: <h6 class="text-left">{{object.author.username}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Modal -->
+    <div class="modal fade" id="DeleteInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Are you sure, you want to delete this invoice?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button><br></br>
+              <form action="#", method="POST">
+                <input class="btn btn-danger" type = "submit" value="Delete"> 
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock content %}

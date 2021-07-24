@@ -1,0 +1,69 @@
+{% extends "invoice/base.html"%}
+{% load static %}
+{% block content %}
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+            <!-- Messages alerts goes here-->
+          <h1><i class="fa fa-file-text"></i> Managing Invoices</h1>
+          <p>Printable invoice and receipt Format</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item"><a href="#">Invoices</a></li>
+        </ul>
+      </div>
+      <div class="clearfix"></div>
+      <div class="col-md-12">
+      <div class="row d-print-none mt-2">
+        <div class="col-12 text-left">
+        <nav class="navbar navbar-light bg-light">
+          <a class="btn btn-primary" href="{% url 'create-invoice3'%}" ><i class="fa fa-print"></i> CREATE NEW INVOICE</a>
+          <strong>Search For Reference number or Name to :{{ tag }}</strong>
+          <form class="form-inline" method="POST" action="# ">
+            <input class="form-control mr-sm-2" type="text" name="tag" id="tag" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </nav>
+      </div>
+      </div>
+    </div>        
+          <div class="clearfix"></div>
+          <div class="col-md-12">
+            <div class="tile">
+              <h3 class="tile-title"></h3>
+              <div class="table-responsive">
+                    <table class="table table-striped">
+                    <thead class="thead-dark"><!--
+                      <tr>
+                        <th>Search:</th>
+                      </tr>-->
+                      <tr>
+                      <th>Reference Number</th>
+                      <th>Date cashed</th>
+                      <th>Name To</th>
+                      <th>Issued By</th>
+                      <th>View Tax Invoice</th>
+                      <th>View Pro Forma Invoice</th>
+                    </tr>
+
+                  </thead>
+                  <tbody>
+                    {% for inv in object_list %}
+                    <tr>
+                      <td>{{inv.ref_nwumber}}</td>
+                      <td>{{inv.issue_date}}</td>
+                      <td>{{inv.name_to}}</td>
+                      <td>{{inv.author.username}}</td>
+                      <td><a href="{% url 'invoice-details' inv.id %}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
+                      <td><a href="# ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
+                    </tr>
+                   {% endfor %}
+                  </tbody>
+                </table>           
+
+              </div>
+            </div>
+          </div>
+    </main>
+    {% endblock content %}

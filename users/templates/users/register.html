@@ -1,0 +1,38 @@
+{% extends "invoice/base.html"%}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+      <div>
+        <h1><i class="fa fa-edit"></i> User registration Form</h1>
+        <p>Registration</p>
+      </div>
+      <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        <li class="breadcrumb-item">Register</li>
+        <li class="breadcrumb-item"><a href="{% url 'login' %}">Login</a></li>
+      </ul>
+    </div>
+   
+      <div class="col-md-8">
+        <div class="tile">
+          <h3 class="tile-title">Register</h3>
+              <div class="content-section">
+              <form method="POST" action="">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Join Today</legend>   
+					{{ form | crispy }}
+                </fieldset>
+				<div class="form-group btn-container">
+					<button class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-fw"></i>Sign Up</button>
+				  </div>
+            </form>
+            <div class="border-top pt-3">
+				<small class="text-muted">
+					Already have an account?<a class="ml-2" href="{% url 'login'%}">Sign In</a>
+				</small>
+          </div>
+      </div>
+{% endblock %}

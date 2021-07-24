@@ -1,0 +1,188 @@
+{% extends "invoice/base.html"%}
+{% load static %}
+{% block content %}
+
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+            <h1><i class="fa fa-file-text"></i> Creating an Invoice</h1>
+            <p>Printable invoice Format</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item"><a href="#">Invoice</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-14">
+        <nav class="navbar navbar-light bg-light">
+
+           <form class="form-inline" method="POST" action="">
+              <button class="btn btn-outline-success" type="submit" form="update">Update next Disbursement fees</button>&nbsp;
+              <a class="btn btn-outline-secondary" href="/"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+          </form>
+        </nav>
+        </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+
+            <section class="invoice">
+              <div class="row mb-4">
+                <div class="col-12">
+                  <h2 class="page-header"> KAMAHORO,KIBOOME&KIRUNDA ADVOCATES</h2>
+                </div>
+                <div class="col-6">
+                  <!--<h5 class="text-right"> </h5>-->
+                </div>
+              </div>
+              
+              <!--<form id="update_invoice" action=" " method="POST">-->
+              <form class="form-horizontal" form id="update" method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row spacer">
+                    <div class="col-12">
+                          <div class="col-4">
+                            <p>Tax Invoice Number: {{bookform.vat}}</p>
+                          </div>
+                        <div class="row invoice-info">
+                            <div class="col-4">From
+                                <address><br>1st Floor Block A-UAP<br><strong>Nakawa Business Park</strong><br>Plot 3-5 Portbell Road<br>P.O.Box:&nbsp;27892 Kampala<br>Email:&nbsp;&nbsp;&nbsp;wmukasa@gmail.com<br>Telephone:&nbsp;&nbsp;&nbsp;0704160994<br>Business Number:&nbsp;&nbsp;&nbsp;0781544517</address>
+                            </div>
+                            <div class="col-4">To
+                                  <address><strong>Name of the client {{ bookform.name_to }}</strong>Company if Any {{bookform.company_name}}Address to {{bookform.address_to}}Email if Any:&nbsp;&nbsp;&nbsp;{{bookform.email_to}}Phone if Any: &nbsp;&nbsp;&nbsp;{{bookform.telephone_to}}P.0.Box if Any&nbsp;&nbsp;{{bookform.box_number_to}}</address>
+                            </div>
+                            <div class="col-4">Invoice #InvoiceNo Auto generated<br>Issue Date: {{ bookform.issue_date }}Payment Terms: {{ bookform.terms }}
+                                Bank:{{ bookform.bank }}Bank branch:{{ bookform.bank_branch }}Swift code:{{ bookform.swift_code }}Account Number:{{ bookform.account_number }}<br>
+                            </div>
+
+                        </div>
+                </div>
+          </div>
+          <div class="col-6 ">
+            <strong>Professional fees/&nbsp;ug.Shs</strong> <br>
+            Professional Amount:{{bookform.professional_amount}}</div>
+                    {{ formset.management_form }}
+                      {% for form in formset %}
+                      <div class="row form-row spacer">
+                        <div class="col-12">
+                          <div class="row invoice-info">
+                        <div class="col-6"> 
+                                  <div>
+                                    <label><strong>{{form.prof_heading.label}}</strong></label>
+                                  </div>
+                                  <div class="input-group" >
+                                  {{form.prof_heading }}
+                                  </div>
+                                  <div >
+                                    <label>{{form.prof_sub1.label}}</label>
+                                  </div>
+                                  <div class="input-group">
+                                    {{form.prof_sub1 }}
+                                  </div>
+                                  <div >
+                                    <label>{{form.prof_sub2.label}}</label>
+                                  </div>
+                                  <div class="input-group">
+                                  {{form.prof_sub2 }}
+                                  </div>
+                                  <div >
+                                  <label>{{form.prof_sub3.label}}</label>
+                                  </div>
+                                  <div class="input-group">
+                                      {{form.prof_sub3 }}
+                                  </div>
+                                    <div >
+                                      <label>{{form.prof_sub4.label}}</label>
+                                  </div>
+                                  <div class="input-group">
+                                    {{form.prof_sub4 }}
+                                  </div>
+                          
+                                  <div >
+                                  <label>{{form.prof_sub5.label}}</label>
+                                </div>
+                                <div class="input-group">
+                                {{form.prof_sub5 }}
+                                </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                    {% endfor %}
+          </form>
+      
+            </section>
+          
+          </div>
+        </div>
+      </div>
+    </main>
+    {% endblock content %}
+    {% block custom_js %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    function updateElementIndex(el, prefix, ndx) {
+        var id_regex = new RegExp('(' + prefix + '-\\d+)');
+        var replacement = prefix + '-' + ndx;
+        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+        if (el.id) el.id = el.id.replace(id_regex, replacement);
+        if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+    function cloneMore(selector, prefix) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+        newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+            var name = $(this).attr('name')
+            if(name) {
+                name = name.replace('-' + (total-1) + '-', '-' + total + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            }
+        });
+        newElement.find('label').each(function() {
+            var forValue = $(this).attr('for');
+            if (forValue) {
+              forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+              $(this).attr({'for': forValue});
+            }
+        });
+        total++;
+        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+        var conditionRow = $('.form-row:not(:last)');
+        conditionRow.find('.btn.add-form-row')
+        .removeClass('btn-success').addClass('btn-danger')
+        .removeClass('add-form-row').addClass('remove-form-row')
+        .html('-');
+        return false;
+    }
+    function deleteForm(prefix, btn) {
+        var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        if (total > 1){
+            btn.closest('.form-row').remove();
+            var forms = $('.form-row');
+            $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+            for (var i=0, formCount=forms.length; i<formCount; i++) {
+                $(forms.get(i)).find(':input').each(function() {
+                    updateElementIndex(this, prefix, i);
+                });
+            }
+        }
+        return false;
+    }
+    $(document).on('click', '.add-form-row', function(e){
+        e.preventDefault();
+        cloneMore('.form-row:last', 'form');
+        return false;
+    });
+    $(document).on('click', '.remove-form-row', function(e){
+        e.preventDefault();
+        deleteForm('form', $(this));
+        return false;
+    });
+    
+    </script>
+    {% endblock %}
+    

@@ -1,0 +1,109 @@
+{% extends "invoice/base.html"%}
+{% load static %}
+{% block content %}
+<main class="app-content">
+    <div class="col-lg-14">
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline" method="POST" action="">
+              <a href="{% url 'update_receipt' object.id %}" class="btn btn-outline-success" type="button">Edit</a>&nbsp;
+  <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#Deletelog">Delete</button>
+             {% comment %}<a href="{% url 'delete_receipt' object.id %}" class="btn btn-outline-danger" button type="button">Delete</a> {% endcomment%}
+              <a class="btn btn-outline-secondary" href="{% url 'our_receipts' %}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Back</a>
+          </form>
+          <form method="POST" action="#">
+            <button class="btn btn-outline-warning" type="submit" id="saveReceipt">Download Receipt</button>&nbsp;
+          </form>
+        </nav>
+        </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <section class="invoice">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="page-header"><img style="border-radius: 50%; height: 80px;width: 80px;margin-right: 12px; margin-bottom: 08px;" src="{% static '/images/image1(2).jpeg' %}"> KAMAHORO,KIBOOME&KIRUNDA ADVOCATES</h2>
+                  </div>
+                </div>
+                  <form id="saveReceipt" method="POST" action="">
+
+            <div class="row invoice-info">
+                <div class="col-4">Location
+                    <address><br>1st Floor Block A-UAP<br><strong>Nakawa Business Park</strong><br>Plot 3-5 Portbell Road<br>P.O.Box:&nbsp;27892 Kampala<br>Email:&nbsp;&nbsp;&nbsp;canaanadvocates@gmail.com<br>Telephone:&nbsp;&nbsp;(+256)-394-836-201</address>
+                  </div>
+              <div class="col-4">
+                <h5 >RECEIPT</h5>
+              </div>
+              <div class="col-4"><h8><b>Date:&nbsp;&nbsp;{{object.date_created}}</h8></b><br><b>Receipt No:&nbsp;&nbsp;{{object.receipt_number}}</b><br></div>
+            </div>
+              <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Received with thanks from:</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control" id="colFormLabel" placeholder="{{ object.received_from }}"disabled="">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">The Sum of shillings:</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control" id="colFormLabel" placeholder="{{ object.sum_in_words}}"disabled="">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Being payment of:</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control" id="colFormLabel" placeholder="{{object.reason}}"disabled="">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Cash/Cheque No:</label>
+                <div class="col-sm-4">
+                  <input type="email" class="form-control" id="colFormLabel" placeholder="{{ object.cash_cheque}}"disabled="">
+                </div>
+                <div class="row mb-2">
+                    <label for="colFormLabel" class="col-sm-4 col-form-label">Balance/(Ug.Shs):</label>
+                    <div class="col-sm-8">
+                      <input type="email" class="form-control" id="colFormLabel" placeholder="{{ object.balance}}"disabled="">
+                </div>
+                </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="colFormLabel" class="col-sm-2 col-form-label">Amount in Figures/(Ug.Shs):</label>
+                    <div class="col-sm-4">
+                      <input type="email" class="form-control" id="colFormLabel" placeholder="{{object.amount}}"disabled="">
+                       With thanks
+                    </div>
+                
+                <div class="row mb-2">
+                    <label for="colFormLabel" class="col-sm-2 col-form-label">Signature:</label>
+                    <div class="col-sm-10">
+                      <input type="email" class="form-control" id="colFormLabel" placeholder="DigitalSignature Required" disabled="">
+                      For:<b>Kamohoro,Kiboome&Kirunda Advocates</b>
+                    </div>
+                </div>
+            </div>
+          </section>
+        </form>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div class="modal fade" id="Deletelog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Do you have a right to this delete receipt</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button><br></br>
+             <form action="{% url 'delete_receipt2' object.id %}", method="POST">
+              {% csrf_token %}
+              <input class="btn btn-danger" type = "submit" value="Delete"> 
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

@@ -1,0 +1,336 @@
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Tax invoice</title>
+		    <style type="text/css" media="print">
+        @page
+        {
+			size: 21cm 29.7cm;
+    		margin: 50px 0;
+        }
+        thead
+        {
+            display: table-header-group;
+        }
+        tfoot
+        {
+            display: table-footer-group;
+        }
+    </style>
+
+		<style type="text/css">
+/* reset */
+
+
+/* heading */
+
+h1 { font: bold 100% sans-serif; letter-spacing: 0.5em; text-align: center; text-transform: uppercase; }
+h3 { font: 100% sans-serif; letter-spacing: 0.5em; text-align: center; text-transform: uppercase; }
+h4 { font: 75% sans-serif; letter-spacing: 0.2em; text-align: center; text-transform: capitalize;  word-spacing: 5px;line-height: 0.1; }
+h5 { font-size: 100%; text-align: center;text-transform: uppercase;}
+h2 { font-size: 150%; }
+h6 { font-size: 80%;text-align: right;line-height: 0.1; }
+/* table */
+
+table { font-size: 100%; table-layout: auto; width: 100%; }
+/*table { font-size: 100%; width: 100%;}*/
+table { border-collapse: collapse; border-spacing: 0px; }
+th, td { border-width: 2px; padding: 0.5em; position: relative; text-align: left; }
+th, td { border-radius: 0.25em; border-style: solid; }
+th { background: #EEE; border-color: #BBB; font-size:100%; }
+td { border-color: #DDD;}
+
+/* page 
+html { font: 16px/1 'Open Sans', sans-serif; overflow: auto; padding: 0.5in; }
+html { background: #999; cursor: default; }*/
+html { font: 16px/1 'Open Sans', sans-serif; overflow: auto; padding: 0.5in; }
+
+body { box-sizing: border-box; height: 25in; margin: 0 auto; overflow: hidden; padding: 0.15in; width: 8.5in; margin-top: 1em; }
+/*
+body { background: #FFF; border-radius: 1px; box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); }
+*/
+/* header */
+
+header { margin: 0 0 0.3em; }
+header:after { clear: both; content: ""; display: table; }
+
+header h1 { background: #000; border-radius: 0.25em; color: #FFF; margin: 0 0 1em; padding: 0.5em 0; }
+header address { float: left; font-size: 100%; font-style: normal; line-height: 1.5; margin: 0 1em 1em 0; }
+header location { float: right; font-size: 100%; font-style: normal; line-height: 1.5; margin: 0 1em 1em 0; }
+header address p { margin: 0 0 0.25em; line-height: 0.9;}
+header invoice_date { float: right; font-size: 100%; font-weight: bold;}
+header span, header img { display: block; float: right; }
+header span { margin: 0 0 1em 1em; max-height: 25%; max-width: 60%; position: relative; }
+header img { max-height: 100%; max-width: 100%; }
+
+
+/* article */
+
+article, article address, table.meta, table.inventory { margin: 0 0 0.05em; }
+article:after { clear: both; content: ""; display: table; }
+article h1 { clip: rect(0 0 0 0); position: absolute; }
+
+article address { float: left; font-size: 100%; font-weight: normal;line-height: 5;}
+
+/* table meta & balance */
+
+table.meta, table.balance { float: right; width: 40%; }
+table.meta:after, table.balance:after { clear: both; content: ""; display: table; }
+table.inv { float: right; width: 40%; }
+/* table meta */
+
+table.meta th { width: 40%; }
+table.meta td { width: 60%; }
+
+/* table items */
+/*
+table.inventory { clear: both; width: 100%; border: 0;}
+table.inventory th { font-weight: bold; text-align: center; }
+
+table.inventory td:nth-child(1) { width: 26%;border: 0; }
+table.inventory td:nth-child(2) { width: 38%;border: 0; }
+table.inventory td:nth-child(3) { text-align: right; width: 12%; }
+table.inventory td:nth-child(4) { text-align: right; width: 12%; }
+table.inventory td:nth-child(5) { text-align: right; width: 12%; }
+
+ table balance */
+
+table.balance th, table.balance td { width: 50%; }
+table.balance td { text-align: right; }
+
+/* aside */
+
+aside h1 { border: none; border-width: 0 0 1px; margin: 0 0 0.05em; }
+aside h1 { border-color: #999; border-bottom-style: solid; }
+
+/* javascript */
+
+.add, .cut
+{
+	border-width: 1px;
+	display: block;
+	font-size: .8rem;
+	padding: 0.25em 0.5em;	
+	float: left;
+	text-align: center;
+	width: 0.6em;
+}
+
+.add, .cut
+{
+	background: #9AF;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+	background-image: -moz-linear-gradient(#00ADEE 5%, #0078A5 100%);
+	background-image: -webkit-linear-gradient(#00ADEE 5%, #0078A5 100%);
+	border-radius: 0.5em;
+	border-color: #0076A3;
+	color: #FFF;
+	cursor: pointer;
+	font-weight: bold;
+	text-shadow: 0 -1px 2px rgba(0,0,0,0.333);
+}
+
+.add { margin: -2.5em 0 0; }
+
+.add:hover { background: #00ADEE; }
+
+.cut { opacity: 0; position: absolute; top: 0; left: -1.5em; }
+
+
+tr:hover .cut { opacity: 1; }
+
+@media print {
+	* { -webkit-print-color-adjust: exact; }
+	html { background: none; padding: 0; }
+	body { box-shadow: none; margin: 0; }
+	span:empty { display: none; }
+	.add, .cut { display: none; }
+}
+
+@page { margin: 0; }
+li{
+		font-size: 100%
+    }
+.line{
+	width: 250px;
+	height: 47px;
+	border-bottom: 1px solid black;
+	position: absolute;
+	}
+div { margin: 50px; }
+
+	.signature{ float: left; }
+	.signature{ 
+	  margin: 20px 10px;
+	  border-top: 1px solid #000;
+	  width: 300px; 
+	  text-align: center;
+	}
+ul.a {
+		list-style-type: circle;
+	}
+	  
+ul.b {
+	list-style-type: square;
+	}
+	  
+ol.c {
+		list-style-type: upper-roman;
+	}
+	  
+ol.d {
+		list-style-type: lower-alpha;
+	}
+.head{
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+	}
+</style>
+	</head>
+	<body>
+		<header>
+			<h1>Kamahoro,Kiboome & Kirunda Advocates</h1>
+			<h4>1st Floor Block A-UAP,Nakawa Business Park,Plot 3-5 Port Bell Road Kampala</h4>
+			<h4>Office:&nbsp;&nbsp;(+256) 394-836-201</h4>
+			<h4>Email:&nbsp;&nbsp;&nbsp;canaanadvocates@gmail.com</h4>
+			<h4>P.O.Box:&nbsp;27892 Kampala</h4>
+			<h5>Tax Invoice</h5>
+			<h6>DATE: {{ object.issue_date }}</h6>
+		<hr style="width:100%;text-align:left;margin-left:0;margin-top: -20px;">
+		
+		<article>
+			<!--<h1>Recipient</h1>-->
+			<address>
+				<p>{{object.name_to}}.</p>
+
+					<p>
+					{{object.company_name}}
+					</p>
+					<p>{{object.address_to}}</p>
+
+					<p>
+					Email:&nbsp;&nbsp;&nbsp;{{object.email_to}}
+					</p>
+					<p>  
+					Phone: &nbsp;&nbsp;&nbsp;{{object.telephone_to}}
+					</p>
+					<p>
+					P.0.Box&nbsp;&nbsp;{{object.box_number_to}}
+					</p>
+			</address>
+			<invoice_date>
+			  <p><strong>Invoice No:&nbsp;&nbsp;&nbsp;{{object.vat}}</strong></P>
+			  <p style="font-weight: normal">Our Ref:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ object.ref_nwumber }}</P>
+			</invoice_date>
+		</header>
+
+			<hr style="width:100%;text-align:left;margin-left:0;margin-top: -5px;">
+			<table class="inventory">
+				<thead>
+					<tr>
+						<tr>
+							<th><span >TIN:&nbsp;&nbsp;&nbsp;1017550332</th>
+							<th><span >Professional fees Ug.shs</span></th>
+							<th><span >Disbursement fees Ug.shs</span></th>
+							<!--<th><span >Total Amount Ug.shs</span></th>-->
+						</tr>
+
+					</tr>
+				</thead>
+				<tbody >
+					<tr>
+                        <td style="text-align:left; border-bottom-style: hidden;"><span>
+						<h7> To Professional fees for </h7>
+                       {% for myItem in object.lineItem.all %}
+					   <ul class="a">
+						<li>{{myItem.prof_heading }}
+						  <ol type="1">
+						   
+								  <li>{{myItem.prof_sub1}}</li>
+								  <li>{{myItem.prof_sub2}}</li>
+
+								  <li>{{myItem.prof_sub3}}</li>
+
+								  <li>{{myItem.prof_sub4}}</li>
+								  <li>{{myItem.prof_sub5}}</li>
+						  </ol>
+						</li>
+						
+					  </ul>
+                          {% endfor %}  
+						   </span>
+						   </td>
+						   <td style="border-bottom-style: hidden;"><span><br>{{object.professional_amount}}&nbsp;/=</span></td>
+						   <td style="border-bottom-style: hidden;"></td>
+							</tr>
+					<tr>
+						<td class="note"style="border-bottom-style: hidden;" ><a class="cut">-</a><span >To 18% VAT payable on professional fees</span></td>
+						<td style="border-bottom-style: hidden;"><span >{{VAT}}&nbsp;/=</span></td>
+						<td style="border-bottom-style: hidden;"></td>
+					</tr>
+					<tr>
+						<td  style="border-bottom-style: hidden;"><h7> To Disbursement</h7></td>
+						<td  style="border-bottom-style: hidden;"></td>
+						<td  style="border-bottom-style: hidden;"></td>
+					</tr>	
+					{% for dbmt in object.disbursement.all %} 
+					<tr>
+							<td style="border-bottom-style: hidden;"><span>
+						
+
+							 <ul class="a">
+							   <li>{{dbmt.disb_heading}} 
+								 <ol type="1">
+
+
+								  <li>{{dbmt.disb_sub1}}</li>
+												
+								  <li>{{dbmt.disb_sub2}}</li>
+
+								  <li>{{dbmt.disb_sub3}}</li>
+
+								  </ol>
+							   </li>
+							  </ul>
+
+						
+							</td>
+							
+								<td style="border-bottom-style: hidden;"></td>
+							  <td style="border-bottom-style: hidden;"><span>
+								
+								{{dbmt.disbursement_amount}}&nbsp;/=
+						
+							</span></td>	
+					</tr>
+
+				{% endfor %}
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tbody>
+			</table>
+			<table class="balance">
+				<tr>
+					<th><span >Total</span><span data-prefix>/Ug.shs</span></th>
+					<td><span>{{grandtotal }}&nbsp;/=</span></td>
+				</tr>
+			</table>
+		</article>
+		<aside>
+			<br><br><h3><span contenteditable>ACCOUNTS ARE DUE WHEN RENDERED;</span></h3>
+			<hr style="width:100%;text-align:center;margin-left:0;margin-top: -15px;">
+            <span>Bank:&nbsp;{{object.bank }}</span>&nbsp;<span>{{object.bank_branch }}</span>/&nbsp;&nbsp;<span></span><span>swift code:&nbsp;&nbsp;{{object.swift_code }}</span>/&nbsp;&nbsp;<span>Account No:&nbsp;&nbsp; {{object.account_number}}</span>
+
+			<div style="float:right;">
+				<span class ="signature">Kamahoro,Kiboome & Kirunda Advocates</span>    
+			  </div>
+		</aside>
+	</body>
+</html>

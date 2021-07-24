@@ -1,0 +1,255 @@
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SecondInvoiceView</title>
+		<style type="text/css">
+html {  padding: 0.9in; }
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+a {
+  color: #5D6975;
+  text-decoration: underline;
+}
+
+body {
+  position: relative;
+  width: 21cm;  
+  height: 29.7cm; 
+  margin: 0 auto; 
+  color: #001028;
+  background: #FFFFFF; 
+  font-family: Arial, sans-serif; 
+  font-size: 12px; 
+  font-family: Arial;
+}
+
+header {
+  padding: 10px 0;
+  margin-bottom: 30px;
+}
+
+#logo {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#logo img {
+  width: 90px;
+}
+
+h1 {
+  border-top: 1px solid  #5D6975;
+  border-bottom: 1px solid  #5D6975;
+  color: #5D6975;
+  font-size: 2.0em;
+  line-height: 1.8em;
+  font-weight: normal;
+  text-align: center;
+  margin: 0 0 20px 0;
+
+}
+
+#project {
+  float: left;
+}
+
+#project span {
+  color: #5D6975;
+  text-align: right;
+  width: 52px;
+  margin-right: 10px;
+  display: inline-block;
+  font-size: 1.0em;
+  line-height: 0.2; 
+}
+
+#company {
+  float: right;
+  text-align: right;
+}
+
+#project div,
+#company div {
+  white-space: nowrap;        
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+
+
+table th,
+table td {
+  text-align: center;
+}
+
+table th {
+  padding: 5px 20px;
+  color: #5D6975;
+  border-bottom: 1px solid #C1CED9;
+  white-space: nowrap;        
+  font-weight: normal;
+}
+
+table .service{
+  text-align: left;
+}
+table .desc{
+	  text-align: right;
+}
+table td {
+  padding: 5px;
+  text-align: right;
+}
+
+table td.service,
+table td.desc {
+  vertical-align: top;
+}
+table.balance th, table.balance td { width: 150%; }
+table.balance td { text-align: right; }
+table td.total2{
+	border-top: 1px solid  #5D6975;
+	border-bottom: 2px solid  #5D6975;
+}
+
+#notices .notice {
+  color: #5D6975;
+  font-size: 1.2em;
+}
+ul.a {
+		list-style-type: circle;
+	}
+	  
+ul.b {
+	list-style-type: square;
+	}
+	  
+ol.c {
+		list-style-type: upper-roman;
+	}
+	  
+ol.d {
+		list-style-type: lower-alpha;
+	}
+footer {
+  color: #5D6975;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid #C1CED9;
+  padding: 8px 0;
+  text-align: center;
+}
+</style>
+  </head>
+  <body>
+    <header>
+      <header class="clearfix">
+        <!--<div id="logo">
+          <img src="logo.png">
+        </div>
+        <h1>INVOICE 3-2-1</h1>-->
+        <div id="company" class="clearfix">
+          <div><span>DATE</span> {{ object.issue_date }}</div>
+        </div>
+        <div id="project">
+        <div><span>Our Ref:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ object.ref_nwumber }}</div>
+        <div><span>Invoice No:</span> {{object.vat}}</div><br>
+          <div><span>To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{object.name_to}}.</div>
+          <div><span></span> {{object.company_name}}</div>
+          <div><span></span> {{object.address_to}}</div><br>
+          <div><span>Phone: &nbsp;&nbsp;&nbsp;</span> {{object.telephone_to}}</div>
+          <div><span>Email: &nbsp;&nbsp;&nbsp;</span> {{object.email_to}}</div>
+          <div><span>P.0.Box:&nbsp;&nbsp;</span>{{object.box_number_to}}</div><br>
+          <div><span>Dear&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Madam/Sir,</div><br>
+          <div><span>RE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> INVOICE</div><br>
+      <div><span>Find below our invoice for your statement</span></div>	
+        </div>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th class="service">PARTICULARS</th>
+            <th class="desc">AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="service">To Professional fees for
+              {% for myItem in object.lineItem.all %}
+              <ul class="a">
+                <li>{{myItem.prof_heading }}
+                  <ol type="1">
+                   
+                      <li>{{myItem.prof_sub1}}</li>
+                      <li>{{myItem.prof_sub2}}</li>
+    
+                      <li>{{myItem.prof_sub3}}</li>
+    
+                      <li>{{myItem.prof_sub4}}</li>
+                      <li>{{myItem.prof_sub5}}</li>
+                  </ol>
+                </li>
+                
+                </ul>
+            {% endfor %} 
+			      </td>
+            <td class="total">{{object.professional_amount}}&nbsp;/=</td>
+          </tr>
+					<tr>
+						<td  class="service">To 18% VAT payable on professional fees</span></td>
+						<td><span >{{VAT}}&nbsp;/=</span></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="service"> To Disbursement</td>
+							
+					</tr>
+          {% for dbmt in object.disbursement.all %} 
+          <tr>
+            <td class="service">
+							<ul class="b">
+                <li>{{dbmt.disb_heading}} 
+                  <ol type="1">
+ 
+ 
+                   <li>{{dbmt.disb_sub1}}</li>
+                         
+                   <li>{{dbmt.disb_sub2}}</li>
+ 
+                   <li>{{dbmt.disb_sub3}}</li>
+
+								  </ol>
+							   </li>
+							  </ul>
+			    </td>
+
+            <td class="total">{{dbmt.disbursement_amount}}&nbsp;/=</td>
+          </tr>
+          {% endfor %}
+		  <tr>
+			<td>TOTAL</td>
+			<td class="total2">{{grandtotal }}&nbsp;/=</td>
+		  </tr>
+        </tbody>
+      </table>
+      <span>Bank:&nbsp;{{object.bank }}</span>&nbsp;<span>{{object.bank_branch }}</span>/&nbsp;&nbsp;<span></span><span>swift code:&nbsp;&nbsp;{{object.swift_code }}</span>/&nbsp;&nbsp;<span>Account No:&nbsp;&nbsp; {{object.account_number}}</span>
+      <div id="notices">
+        <div>NOTICE:</div>
+        <div class="notice">This bill is payable by Cash or Cheque  to M/s Kamahoroo, Kiboome & Kirunda Advocates.</div>
+      </div>
+	  <div><h1>For :KAMAHOROO KIBOOME &KIRUNDA ADVOCATES.</h1></div>
+    </main>
+  </body>
+</html>

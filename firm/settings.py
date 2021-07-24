@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import os
+import django_heroku
 DIRNAME = os.path.abspath(os.path.dirname(__file__))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -143,3 +144,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'firm-home'
 LOGIN_URL = 'login'
+
+django_heroku.settings(locals())

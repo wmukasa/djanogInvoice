@@ -210,7 +210,7 @@ class createInvoice(View):
 
 
 def create_disbursements(request):
-    template_name = 'invoice/createinvoiceDis.html'
+    template_name = 'invoice/createInvoiceDis.html'
     if request.method == 'GET':
         #formset = InvoiceFormset(request.GET or None)
         formsetDis = DisbursementsModelFormset(queryset=Disbursements.objects.none())

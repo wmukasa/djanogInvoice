@@ -16,8 +16,7 @@ from django.views.generic import (ListView,DetailView,CreateView,View,
                                     DeleteView,UpdateView)
 import os, sys, subprocess, platform
 import pdfkit
-path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)   
+   
 def _get_pdfkit_config():
 
     if platform.system() == 'Windows':

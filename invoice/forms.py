@@ -129,6 +129,7 @@ InvoiceLineItemModelFormset = modelformset_factory(
     InvoiceLineItem,
     fields=('prof_heading','prof_sub1','prof_sub2','prof_sub3','prof_sub4','prof_sub5', ),
     extra=1,
+
     widgets={'prof_heading': forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter the professional main heading'

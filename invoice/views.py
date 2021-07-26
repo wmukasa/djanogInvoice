@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import get_template,render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect,get_object_or_404
@@ -42,8 +43,9 @@ wk_options = {
         'margin-bottom': '0.1cm',
         'lowquality': None,
 } 
-
-class homeListView(ListView):
+def login(request):
+	return render(request,'users/logout.html')
+class homeListView(LoginRequiredMixin,ListView):
     model = Invoice
     paginate_by = 10
     ordering=['-issue_date'] 

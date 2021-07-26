@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import get_template,render_to_string
 from django.core.exceptions import ObjectDoesNotExist
@@ -42,7 +43,8 @@ wk_options = {
         'margin-top': '0.1cm',
         'margin-bottom': '0.1cm',
         'lowquality': None,
-} 
+}
+@login_required 
 def login(request):
 	return render(request,'users/logout.html')
 class homeListView(LoginRequiredMixin,ListView):
@@ -51,14 +53,14 @@ class homeListView(LoginRequiredMixin,ListView):
     ordering=['-issue_date'] 
     template_name = 'invoice/dashboard.html'
 
-class invoiceDetailView(DetailView):
+class invoiceDetailView(LoginRequiredMixin,DetailView):
     model = Invoice
     #model = InvoiceLineItem
     template_name = 'invoice/invoice_detail.html'
     def get_absolute_url(self):
         return reverse('invoice-details', kwargs={'pk':self.pk})
 
-class invoiceDView(View):
+class invoiceDView(LoginRequiredMixin,View):
     def get(self,request,pk, *args, **kwargs):
         inv_id = get_object_or_404(Invoice,pk=pk)
         VAT =0
@@ -85,11 +87,11 @@ class invoiceDView(View):
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have such an invoice")
             return redirect("/")
-
+@login_required
 def InvoiceCreate(request):
     return render(request,'invoice/createInvoice.html')
 
-class InvoiceCreate(View):
+class InvoiceCreate(LoginRequiredMixin,View):
     
     def get(self,*args,**kwargs):
         form = invoiceCreateForm()
@@ -98,7 +100,7 @@ class InvoiceCreate(View):
         }
  
         return render(self.request,'invoice/createInvoice.html',context)
-
+@login_required
 def create_book_normal(request):
     template_name = 'invoice/createInvoice.html'
     heading_message = 'Formset Demo'
@@ -119,7 +121,7 @@ def create_book_normal(request):
         'formset': formset,
         'heading': heading_message,
     })
-
+@login_required
 def create_invoice_with_items(request):
     template_name = 'invoice/createInvoice.html'
     if request.method == 'GET':
@@ -154,7 +156,7 @@ def create_invoice_with_items(request):
         'formset': formset,
 
     })
-class createInvoice(View):
+class createInvoice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         bookform = InvoiceSecondModelForm()
         formset =InvoiceLineItemModelFormset(queryset=InvoiceLineItem.objects.none())
@@ -210,7 +212,7 @@ class createInvoice(View):
             messages.info(self.request,"This invoice was not saved.")
             return redirect('firm-home')
 
-
+@login_required
 def create_disbursements(request):
     template_name = 'invoice/createInvoiceDis.html'
     if request.method == 'GET':
@@ -249,7 +251,7 @@ def create_disbursements(request):
         'formsetDis':formsetDis,
     })
 
-class invoiceUpdateView(View):
+class invoiceUpdateView(LoginRequiredMixin,View):
     template_name='invoice/invoiceUpdate.html'
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -308,7 +310,7 @@ class invoiceUpdateView(View):
            
         return render(request,self.template_name,context)
 
-class invoicePDFView(View):
+class invoicePDFView(LoginRequiredMixin,View):
     def get(self,request,pk, *args, **kwargs):
         inv_id = get_object_or_404(Invoice,pk=pk)
         VAT =0
@@ -343,7 +345,7 @@ class invoicePDFView(View):
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have such an invoice")
             return redirect("/")
-class invoicePDFView2(View):
+class invoicePDFView2(LoginRequiredMixin,View):
     def get(self,request,pk, *args, **kwargs):
         inv_id = get_object_or_404(Invoice,pk=pk)
         VAT =0

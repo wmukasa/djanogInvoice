@@ -10,7 +10,8 @@ from .views import (
                     createInvoice,
                     invoiceUpdateView,
                     invoicePDFView,
-                    invoicePDFView2
+                    invoicePDFView2,
+                    proformaView,ProformainvoicePDFView,ProformainvoicePDFView2,
                     )
 from .import views
 urlpatterns = [
@@ -20,13 +21,16 @@ urlpatterns = [
     #path('<int:pk>/details',invoiceDetailView.as_view(),name='invoice-details'),
     path('<int:pk>/details',invoiceDView.as_view(),name='invoice-details'),
     #path('createInvoice/',views.InvoiceCreate,name='create-invoice'),
-    path('createInvoice/',views.create_book_normal,name='create-invoice'),
+    path('createInvoice3/',views.create_book_normal,name='create-invoice'),
     #path('createInvoice/',InvoiceCreate.as_view(),name='create-invoice'),
     path('createInvoice2/',views.create_invoice_with_items,name='create-invoice2'),
     #Used class based function to creating the invoice
-    path('createInvoice3/',createInvoice.as_view(),name='create-invoice3'),
+    path('createInvoice/',createInvoice.as_view(),name='create-invoice3'),
     path('createInvoiceDis/',views.create_disbursements,name='createDisb'),
     path('<int:pk>/update', invoiceUpdateView.as_view(), name='update_invoice'),
     path('<int:pk>/invoicePdf',invoicePDFView.as_view(),name='invoice_pdf'),
     path('<int:pk>/invoicePdf2',invoicePDFView2.as_view(),name='invoice_pdf2'),
+    path('<int:pk>/proformaInvoice',proformaView.as_view(),name='proforma-details'),
+    path('<int:pk>/proformaInvoicePdf',ProformainvoicePDFView.as_view(),name='Proformainvoice_pdf'),
+    path('<int:pk>/proformaInvoicePdf2',ProformainvoicePDFView2.as_view(),name='Proformainvoice_pdf2'),
 ]

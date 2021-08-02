@@ -7,17 +7,18 @@ from django.utils import timezone
 class Invoice(models.Model):
     ref_nwumber = models.CharField(max_length=20)
     name_to = models.CharField(max_length=200)
-    company_name = models.CharField(max_length=200)
+    company_name = models.CharField(max_length=200, null=True, blank=True)
     address_to = models.CharField(max_length=200)
 
-    telephone_to = models.CharField(max_length=200)
-    email_to = models.EmailField(max_length=254)
-    box_number_to = models.CharField(max_length=200)
-    terms = models.CharField(max_length=200)
+    telephone_to = models.CharField(max_length=200, null=True, blank=True)
+    email_to = models.EmailField(max_length=254, null=True, blank=True)
+    box_number_to = models.CharField(max_length=200, null=True, blank=True)
+    terms = models.CharField(max_length=200, null=True, blank=True)
 
     issue_date = models.DateTimeField(default=timezone.now)
+    #issue_date =models.DateField(default=datetime.now().date())
     #due_date =db.Column(db.Date,nullable=False)
-    vat = models.CharField(max_length=200)
+    vat = models.CharField(max_length=200, null=True, blank=True)
     bank =models.CharField(max_length=200)
     bank_branch =models.CharField(max_length=200)
     swift_code =models.CharField(max_length=200)
@@ -36,26 +37,26 @@ class Invoice(models.Model):
         return q_custom_id
 
     def __str__(self):
-        return self.name_to
+        return self.ref_nwumber
 
     def get_absolute_url(self):
         return reverse("invoice-details",kwargs={"pk":self.pk})
 
 
 class InvoiceLineItem(models.Model): 
-    prof_heading = models.CharField(max_length=255)
-    prof_sub1 = models.CharField(max_length=200)
-    prof_sub2 = models.CharField(max_length=200)
-    prof_sub3 = models.CharField(max_length=200)
-    prof_sub4 = models.CharField(max_length=200)
-    prof_sub5 = models.CharField(max_length=200)
+    prof_heading = models.CharField(max_length=255, null=False, blank=False)
+    prof_sub1 = models.CharField(max_length=200, null=True, blank=True)
+    prof_sub2 = models.CharField(max_length=200, null=True, blank=True)
+    prof_sub3 = models.CharField(max_length=200, null=True, blank=True)
+    prof_sub4 = models.CharField(max_length=200, null=True, blank=True)
+    prof_sub5 = models.CharField(max_length=200, null=True, blank=True)
     invoice = models.ForeignKey('Invoice',
                                 related_name='lineItem', on_delete=models.SET_NULL,blank=True,null=True)
     class Meta:
         db_table = 'lineItem'
 
     def __str__(self):
-        return self.prof_heading 
+        return str(self.invoice)
     def get_absolute_url(self):
         return reverse("invoice-details",kwargs={"pk":self.pk}) 
 
@@ -79,18 +80,18 @@ class InvoiceLineItem(models.Model):
     )
 '''
 class Disbursements(models.Model):
-    disbursement_amount =models.CharField(max_length=200)
-    disb_heading = models.CharField(max_length=200)
-    disb_sub1 = models.CharField(max_length=200)
-    disb_sub2 = models.CharField(max_length=200)
-    disb_sub3 = models.CharField(max_length=200)
+    disbursement_amount =models.CharField(max_length=200, null=False, blank=False)
+    disb_heading = models.CharField(max_length=200, null=False, blank=False)
+    disb_sub1 = models.CharField(max_length=200, null=True, blank=True)
+    disb_sub2 = models.CharField(max_length=200, null=True, blank=True)
+    disb_sub3 = models.CharField(max_length=200, null=True, blank=True)
     invoice = models.ForeignKey('Invoice',
                                 related_name='disbursement', on_delete=models.SET_NULL,blank=True,null=True)
     class Meta:
         db_table = 'Disbursements'
 
     def __str__(self):
-        return self.disb_heading  
+        return str(self.invoice)  
 
 
 

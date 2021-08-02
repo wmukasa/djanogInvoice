@@ -68,7 +68,7 @@ class invoiceDView(LoginRequiredMixin,View):
         subtotal_db = 0
         grandtotal =0
         try:
-            invoice = Invoice.objects.get(name_to=inv_id)
+            invoice = Invoice.objects.get(ref_nwumber=inv_id)
             VAT = (18/100)*(invoice.professional_amount)
             subtotal_pr = float(VAT+invoice.professional_amount)
             dis = Disbursements.objects.filter(invoice=invoice).all()
@@ -318,7 +318,7 @@ class invoicePDFView(LoginRequiredMixin,View):
         subtotal_db = 0
         grandtotal =0
         try:
-            invoice = Invoice.objects.get(name_to=inv_id)
+            invoice = Invoice.objects.get(ref_nwumber=inv_id)
             VAT = (18/100)*(invoice.professional_amount)
             subtotal_pr = float(VAT+invoice.professional_amount)
             dis = Disbursements.objects.filter(invoice=invoice).all()
@@ -353,7 +353,7 @@ class invoicePDFView2(LoginRequiredMixin,View):
         subtotal_db = 0
         grandtotal =0
         try:
-            invoice = Invoice.objects.get(name_to=inv_id)
+            invoice = Invoice.objects.get(ref_nwumber=inv_id)
             VAT = (18/100)*(invoice.professional_amount)
             subtotal_pr = float(VAT+invoice.professional_amount)
             dis = Disbursements.objects.filter(invoice=invoice).all()
@@ -380,6 +380,101 @@ class invoicePDFView2(LoginRequiredMixin,View):
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have such an invoice")
             return redirect("/")
-
-
+class proformaView(LoginRequiredMixin,View):
+    def get(self,request,pk, *args, **kwargs):
+        inv_id = get_object_or_404(Invoice,pk=pk)
+        VAT =0
+        subtotal_pr=0
+        subtotal_db = 0
+        grandtotal =0
+        try:
+            invoice = Invoice.objects.get(ref_nwumber=inv_id)
+            VAT = (18/100)*(invoice.professional_amount)
+            subtotal_pr = float(VAT+invoice.professional_amount)
+            dis = Disbursements.objects.filter(invoice=invoice).all()
+            for q in dis:
+                subtotal_db +=float(q.disbursement_amount)
+            grandtotal = subtotal_pr+subtotal_db
+            #print(grandtotal) 
+            context = {
+                'object': invoice,
+                'VAT':VAT,
+                'subtotal_pr':subtotal_pr,
+                'subtotal_db':subtotal_db,
+                'grandtotal':grandtotal 
+            }
+            return render(self.request,'invoice/proformInvoice.html',context)
+        except ObjectDoesNotExist:
+            messages.error(self.request,"You do not have such an invoice")
+            return redirect("/")
+class ProformainvoicePDFView(LoginRequiredMixin,View):
+    def get(self,request,pk, *args, **kwargs):
+        inv_id = get_object_or_404(Invoice,pk=pk)
+        VAT =0
+        subtotal_pr=0
+        subtotal_db = 0
+        grandtotal =0
+        try:
+            invoice = Invoice.objects.get(ref_nwumber=inv_id)
+            VAT = (18/100)*(invoice.professional_amount)
+            subtotal_pr = float(VAT+invoice.professional_amount)
+            dis = Disbursements.objects.filter(invoice=invoice).all()
+            for q in dis:
+                subtotal_db +=float(q.disbursement_amount)
+            grandtotal = subtotal_pr+subtotal_db
+            #print(grandtotal) 
+            context = {
+                'object': invoice,
+                'VAT':VAT,
+                'subtotal_pr':subtotal_pr,
+                'subtotal_db':subtotal_db,
+                'grandtotal':grandtotal 
+            }
+            template = get_template('invoice/proformaInvoicePdf.html')
+            html = template.render(context)
+            #css = ['firm/invoice/static/css/testing.css']
+            pdf = pdfkit.from_string(html,False,configuration=_get_pdfkit_config(),options=wk_options)
+            response = HttpResponse(pdf)
+            response.headers['Content-Type']='application/pdf'
+            #response.headers['Content-Disposition']='inline; filename=TaxInvoice'+str(pk)+'.pdf'
+            #response = HttpResponse(pdf, content_type='application/pdf')
+            return response
+        except ObjectDoesNotExist:
+            messages.error(self.request,"You do not have such an invoice")
+            return redirect("/")  
+class ProformainvoicePDFView2(LoginRequiredMixin,View):
+    def get(self,request,pk, *args, **kwargs):
+        inv_id = get_object_or_404(Invoice,pk=pk)
+        VAT =0
+        subtotal_pr=0
+        subtotal_db = 0
+        grandtotal =0
+        try:
+            invoice = Invoice.objects.get(ref_nwumber=inv_id)
+            VAT = (18/100)*(invoice.professional_amount)
+            subtotal_pr = float(VAT+invoice.professional_amount)
+            dis = Disbursements.objects.filter(invoice=invoice).all()
+            for q in dis:
+                subtotal_db +=float(q.disbursement_amount)
+            grandtotal = subtotal_pr+subtotal_db
+            #print(grandtotal) 
+            context = {
+                'object': invoice,
+                'VAT':VAT,
+                'subtotal_pr':subtotal_pr,
+                'subtotal_db':subtotal_db,
+                'grandtotal':grandtotal 
+            }
+            template = get_template('invoice/proformaInvoicePdf2.html')
+            html = template.render(context)
+            #css = ['firm/invoice/static/css/testing.css']
+            pdf = pdfkit.from_string(html,False,configuration=_get_pdfkit_config(),options=wk_options)
+            response = HttpResponse(pdf)
+            response.headers['Content-Type']='application/pdf'
+            #response.headers['Content-Disposition']='inline; filename=TaxInvoice'+str(pk)+'.pdf'
+            #response = HttpResponse(pdf, content_type='application/pdf')
+            return response
+        except ObjectDoesNotExist:
+            messages.error(self.request,"You do not have such an invoice")
+            return redirect("/")
     

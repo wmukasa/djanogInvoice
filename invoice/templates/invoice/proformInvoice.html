@@ -29,10 +29,10 @@
               <a class="btn btn-outline-secondary" href="/"><i class="fa fa-fw fa-lg fa-times-circle"></i>Back</a>
           </form>
           <form method="POST" action="#">
-           <a class="btn btn-outline-secondary" href="{% url 'invoice_pdf' object.id%}"><i class="glyphicon glyphicon-save"></i>Download firstVersion Tax Invoice</a>&nbsp;
+           <a class="btn btn-outline-secondary" href="{% url 'Proformainvoice_pdf' object.id%}"><i class="glyphicon glyphicon-save"></i>Download firstVersion ProformaInvoice</a>&nbsp;
           </form>
           <form method="POST" action="#">
-            <a class="btn btn-outline-warning" href="{% url 'invoice_pdf2' object.id%}">Download SecondVersion Tax Invoice</a>&nbsp;
+            <a class="btn btn-outline-warning" href="{% url 'Proformainvoice_pdf2' object.id%}">Download SecondVersion ProformaInvoice</a>&nbsp;
           </form>
         </nav>
         </div>
@@ -46,8 +46,7 @@
                   <h2 class="page-header"><img style="border-radius: 50%; height: 80px;width: 80px;margin-right: 12px; margin-bottom: 08px;" src="{% static '/images/image1(2).jpeg' %}"> KAMAHORO,KIBOOME&KIRUNDA ADVOCATES</h2>
                 </div>
                 <div class="col-6">
-                  <h5 class="text-right">TAX INVOICE</h5>
-                  <h6 class="text-right">{% if object.vat == None %}{% else%}Tax Invoice Number:&nbsp;&nbsp;&nbsp;{{object.vat}}{% endif %}</h6>
+                  <h5 class="text-right">Pro Forma Invoice</h5>
                 </div>
 
               </div>

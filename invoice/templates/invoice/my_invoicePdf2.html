@@ -160,17 +160,18 @@ footer {
         </div>
         <h1>INVOICE 3-2-1</h1>-->
         <div id="company" class="clearfix">
-          <div><span>DATE</span> {{ object.issue_date }}</div>
+          <div><span>DATE</span> {{ object.issue_date|date:"M d Y" }}</div>
         </div>
         <div id="project">
         <div><span>Our Ref:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ object.ref_nwumber }}</div>
-        <div><span>Invoice No:</span> {{object.vat}}</div><br>
+        <div><span>{% if object.vat == None %}{% else%}Invoice No:</span>{{object.vat}}{% endif %}</div><br>
+        
           <div><span>To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{object.name_to}}.</div>
-          <div><span></span> {{object.company_name}}</div>
+          <div><span></span>{% if object.company_name == None %}{% else%}{{object.company_name}}{% endif %}</div>
           <div><span></span> {{object.address_to}}</div><br>
-          <div><span>Phone: &nbsp;&nbsp;&nbsp;</span> {{object.telephone_to}}</div>
-          <div><span>Email: &nbsp;&nbsp;&nbsp;</span> {{object.email_to}}</div>
-          <div><span>P.0.Box:&nbsp;&nbsp;</span>{{object.box_number_to}}</div><br>
+          <div><span>{% if object.email_to == None %}{% else%}Email: &nbsp;&nbsp;&nbsp;</span>{{object.email_to}}{% endif %}</div>
+          <div><span>{% if object.telephone_to == None %}{% else%}Phone: &nbsp;&nbsp;&nbsp;</span>{{object.telephone_to }}{% endif %}</div>
+          <div><span>{% if object.box_number_to == None %}{% else%}P.0.Box:&nbsp;&nbsp;</span>{{object.box_number_to}} {% endif %}</div><br>
           <div><span>Dear&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Madam/Sir,</div><br>
           <div><span>RE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> INVOICE</div><br>
       <div><span>Find below our invoice for your statement</span></div>	
@@ -191,14 +192,26 @@ footer {
               <ul class="a">
                 <li>{{myItem.prof_heading }}
                   <ol type="1">
-                   
-                      <li>{{myItem.prof_sub1}}</li>
-                      <li>{{myItem.prof_sub2}}</li>
-    
-                      <li>{{myItem.prof_sub3}}</li>
-    
-                      <li>{{myItem.prof_sub4}}</li>
-                      <li>{{myItem.prof_sub5}}</li>
+                    {% if myItem.prof_sub1 != None %}
+                    <li>{{myItem.prof_sub1}}</li>
+              {% else %}
+              {% endif%}
+              {% if myItem.prof_sub2 != None %}
+                    <li>{{myItem.prof_sub2}}</li>
+              {% else %}
+              {% endif%}
+              {% if myItem.prof_sub3 != None %}
+                    <li>{{myItem.prof_sub3}}</li>
+              {% else %}
+              {% endif%}
+              {% if myItem.prof_sub4 != None %}
+                    <li>{{myItem.prof_sub4}}</li>
+              {% else %}
+              {% endif%}
+              {% if myItem.prof_sub5 != None %}
+                    <li>{{myItem.prof_sub5}}</li>
+              {% else %}
+              {% endif%}
                   </ol>
                 </li>
                 
@@ -222,13 +235,18 @@ footer {
 							<ul class="b">
                 <li>{{dbmt.disb_heading}} 
                   <ol type="1">
- 
- 
-                   <li>{{dbmt.disb_sub1}}</li>
-                         
-                   <li>{{dbmt.disb_sub2}}</li>
- 
-                   <li>{{dbmt.disb_sub3}}</li>
+                    {% if dbmt.disb_sub1 != None %}
+                    <li>{{dbmt.disb_sub1}}</li>
+                          {% else %}
+                    {% endif%}
+                    {% if dbmt.disb_sub2 != None %}
+                    <li>{{dbmt.disb_sub2}}</li>
+                          {% else %}
+                    {% endif%}
+                    {% if dbmt.disb_sub3 != None %}
+                    <li>{{dbmt.disb_sub3}}</li>
+                          {% else %}
+                    {% endif%}
 
 								  </ol>
 							   </li>

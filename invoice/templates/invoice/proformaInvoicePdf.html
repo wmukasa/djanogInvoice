@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Tax invoice</title>
+		<title></title>
 		    <style type="text/css" media="print">
         @page
         {
@@ -198,7 +198,7 @@ ol.d {
 			<h4>Office:&nbsp;&nbsp;(+256) 394-836-201</h4>
 			<h4>Email:&nbsp;&nbsp;&nbsp;canaanadvocates@gmail.com</h4>
 			<h4>P.O.Box:&nbsp;27892 Kampala</h4>
-			<h5>Tax Invoice</h5>
+			<h5>Proforma Invoice</h5>
 			<h6>DATE: {{ object.issue_date|date:"M d Y" }}</h6>
 		<hr style="width:100%;text-align:left;margin-left:0;margin-top: -20px;">
 		
@@ -235,7 +235,6 @@ ol.d {
 					</p>
 			</address>
 			<invoice_date>
-			  <p><strong>{% if object.vat == None %}{% else%}Invoice No:&nbsp;&nbsp;&nbsp;{{object.vat}}{% endif %}</strong></P>
 			  <p style="font-weight: normal">Our Ref:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ object.ref_nwumber }}</P>
 			</invoice_date>
 		</header>

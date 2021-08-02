@@ -52,11 +52,11 @@
                     {% for inv in object_list %}
                     <tr>
                       <td>{{inv.ref_nwumber}}</td>
-                      <td>{{inv.issue_date}}</td>
+                      <td>{{inv.issue_date|date:"M d Y"}}</td>
                       <td>{{inv.name_to}}</td>
                       <td>{{inv.author.username}}</td>
                       <td><a href="{% url 'invoice-details' inv.id %}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
-                      <td><a href="# ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
+                      <td><a href="{% url 'proforma-details' inv.id %} ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
                     </tr>
                    {% endfor %}
                   </tbody>

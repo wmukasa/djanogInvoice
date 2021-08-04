@@ -12,11 +12,15 @@ from .views import (
                     invoicePDFView,
                     invoicePDFView2,
                     proformaView,ProformainvoicePDFView,ProformainvoicePDFView2,
+                    InvoiceDeleteView
                     )
 from .import views
 urlpatterns = [
     #path('', views.login,name='firm-login'),
     path('',homeListView.as_view(),name='firm-home'),
+    path('<int:pk>/update',views.invoice_update,name='invoice_update22'),
+    path('<int:pk>/EditDisbursement',views.disbursementUpdate,name='DisburUpdate'),
+    #path('<int:pk>/update',views.update,name='update22'),
     path('dashboard/',homeListView.as_view(),name='firm-home'),
     #path('<int:pk>/details',invoiceDetailView.as_view(),name='invoice-details'),
     path('<int:pk>/details',invoiceDView.as_view(),name='invoice-details'),
@@ -33,4 +37,7 @@ urlpatterns = [
     path('<int:pk>/proformaInvoice',proformaView.as_view(),name='proforma-details'),
     path('<int:pk>/proformaInvoicePdf',ProformainvoicePDFView.as_view(),name='Proformainvoice_pdf'),
     path('<int:pk>/proformaInvoicePdf2',ProformainvoicePDFView2.as_view(),name='Proformainvoice_pdf2'),
+    path('<int:pk>/DeleteInvoice',InvoiceDeleteView.as_view(), name='invoice_delete'),
+
+    
 ]

@@ -166,7 +166,7 @@ class receiptDeleteView(DeleteView):
         return reverse('our_receipts')
 
 
-#deleting using a function 
+#deleting using a function, the working function for the app
 def receipt_delete_view(request,id):
     obj = get_object_or_404(receipt,pk=pk)
     if request.method =='POST':

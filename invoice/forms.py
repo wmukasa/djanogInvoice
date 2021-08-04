@@ -3,8 +3,10 @@ from django import forms
 from .models import Invoice
 from datetime import datetime,date
 from django.utils import timezone
+from django.forms import ModelForm
 #from django.forms import formset_factory
 from django.forms import (formset_factory, modelformset_factory)
+from django.forms.models import inlineformset_factory
 from .models import (Invoice,InvoiceLineItem,Disbursements)
 #Use case 1: Create formset for a normal form
 
@@ -129,7 +131,6 @@ InvoiceLineItemModelFormset = modelformset_factory(
     InvoiceLineItem,
     fields=('prof_heading','prof_sub1','prof_sub2','prof_sub3','prof_sub4','prof_sub5', ),
     extra=1,
-
     widgets={'prof_heading': forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter the professional main heading'
@@ -174,3 +175,49 @@ class InvoiceLineItemModelForm(forms.ModelForm):
         # specify model to be used
         model = InvoiceLineItem
         fields = ['prof_heading','prof_sub1','prof_sub2','prof_sub3','prof_sub4','prof_sub5']
+
+
+
+LineIteminlineFormset= inlineformset_factory(
+    Invoice,InvoiceLineItem,
+    fields=('prof_heading','prof_sub1','prof_sub2','prof_sub3','prof_sub4','prof_sub5',),
+    extra=1,
+    can_delete=True,
+    max_num=4,
+    widgets={'prof_heading': forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter the professional main heading'
+        }),
+        'prof_sub1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+        'prof_sub2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+        'prof_sub3': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+        'prof_sub4': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+        'prof_sub5': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+    }
+)
+
+DisbursementsinlineFormset = inlineformset_factory(
+    Invoice,Disbursements,
+    fields=('disbursement_amount','disb_heading','disb_sub1','disb_sub2','disb_sub3' ),
+    extra=1,
+    can_delete=True,
+    widgets={'disbursement_amount': forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter the Disbursement Amount'
+        }),
+        'disb_heading': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+        'disb_sub1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+        'disb_sub2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+        'disb_sub3': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''
+        }),
+
+    }
+)

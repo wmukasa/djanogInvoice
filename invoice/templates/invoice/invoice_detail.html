@@ -21,7 +21,7 @@
          </form>
             <form class="form-inline" method="POST" action="">
 
-              <a href="{% url 'update_invoice' object.id%}" class="btn btn-outline-success" type="button">Edit</a>&nbsp;
+              <a href="{% url 'invoice_update22' object.id%}" class="btn btn-outline-success" type="button">Edit</a>&nbsp;
               <!--<button type="button" class="btn btn-outline-danger " data-toggle="modal" data-target="#DeleteInvoice">Delete Invoice</button>&nbsp;-->
 
               <button type="button" class="btn btn-outline-danger " data-toggle="modal" data-target="#DeleteInvoice">Delete Invoice</button>&nbsp;
@@ -193,8 +193,9 @@
           
           <div class="modal-footer">
               <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button><br></br>
-              <form action="#", method="POST">
-                <input class="btn btn-danger" type = "submit" value="Delete"> 
+                <form action="{% url 'invoice_delete' object.id %}", method="POST">
+                  {% csrf_token %}
+                  <input class="btn btn-danger" type = "submit" value="Delete"> 
               </form>
           </div>
         </div>

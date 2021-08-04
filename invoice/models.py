@@ -56,7 +56,7 @@ class InvoiceLineItem(models.Model):
         db_table = 'lineItem'
 
     def __str__(self):
-        return str(self.invoice)
+        return (str(self.invoice))
     def get_absolute_url(self):
         return reverse("invoice-details",kwargs={"pk":self.pk}) 
 

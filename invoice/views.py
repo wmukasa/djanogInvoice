@@ -1,12 +1,15 @@
 from django.contrib import messages
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
+from django.db import transaction
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import get_template,render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect,get_object_or_404
 from datetime import datetime,date
+
 #from .forms import invoiceCreateForm
 from django.views.generic import (ListView,DetailView,CreateView,
                                     DeleteView,UpdateView,View)
@@ -15,14 +18,16 @@ from .forms import (
     InvoiceLineItemModelFormset,
     InvoiceSecondModelForm,
     DisbursementsModelFormset,
-    InvoiceLineItemModelForm
+    InvoiceLineItemModelForm,
+    LineIteminlineFormset,
+    DisbursementsinlineFormset
     )
 from django.forms import (inlineformset_factory)
 from .models import (Invoice,InvoiceLineItem,Disbursements)
 import os, sys, subprocess, platform
 import pdfkit
 from wkhtmltopdf.views import PDFTemplateView
-
+from django.forms import (formset_factory, modelformset_factory,inlineformset_factory)
 def _get_pdfkit_config():
 
     if platform.system() == 'Windows':
@@ -309,6 +314,41 @@ class invoiceUpdateView(LoginRequiredMixin,View):
             #return reverse('invoice-details', kwargs={'pk':self.pk})
            
         return render(request,self.template_name,context)
+@login_required
+def invoice_update(request, pk=None):
+        if request.method == 'GET':
+                instance = get_object_or_404(Invoice,pk=pk) 
+                #print(instance.id)
+                bookform = InvoiceSecondModelForm(request.POST or None, request.FILES or None, instance=instance)
+                #formset = InvoiceLineItemModelFormset(queryset=InvoiceLineItem.objects.filter(invoice=instance).all())
+                formset=LineIteminlineFormset(instance=instance)
+                #formset = InvoiceLineItemModelFormset(request.POST,queryset=InvoiceLineItem.objects.filter(invoice=instance).all())
+        elif request.method == 'POST':
+                instance = get_object_or_404(Invoice,pk=pk)
+                bookform = InvoiceSecondModelForm(request.POST,request.FILES or None, instance=instance)
+                #formset = InvoiceLineItemModelFormset(request.POST,queryset=InvoiceLineItem.objects.filter(invoice=instance))
+                formset = LineIteminlineFormset(request.POST,instance=instance)
+                formset.save()
+                if bookform.is_valid():
+                    bookform.save()
+                    return  redirect('DisburUpdate',pk=pk)
+        
+        context = {
+            "instance": instance,
+            "bookform": bookform,
+            "formset": formset
+        }
+        return render(request,'invoice/invoiceUpdate.html',context)
+
+@login_required        
+def disbursementUpdate(request,pk=None):
+        dis = Invoice.objects.get(pk=pk)
+        formset = DisbursementsinlineFormset(instance=dis)
+        if request.method == 'POST':
+            formset = DisbursementsinlineFormset(request.POST,instance=dis)
+            formset.save()
+            return redirect('invoice-details',pk=pk)
+        return render(request,'invoice/disbUpdate.html',{'formset':formset})
 
 class invoicePDFView(LoginRequiredMixin,View):
     def get(self,request,pk, *args, **kwargs):
@@ -477,4 +517,13 @@ class ProformainvoicePDFView2(LoginRequiredMixin,View):
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have such an invoice")
             return redirect("/")
-    
+#using inlineformset_factory for the editing the user entries
+class InvoiceDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+	success_url = '/'
+	model = Invoice
+	def test_func(self):
+		invoice = self.get_object()
+		if self.request.user ==invoice.author:
+			return True
+		return False
+

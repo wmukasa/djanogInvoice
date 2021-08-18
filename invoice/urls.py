@@ -12,13 +12,15 @@ from .views import (
                     invoicePDFView,
                     invoicePDFView2,
                     proformaView,ProformainvoicePDFView,ProformainvoicePDFView2,
-                    InvoiceDeleteView
+                    InvoiceDeleteView,SearchView
                     )
 from .import views
 urlpatterns = [
     #path('', views.login,name='firm-login'),
     path('',homeListView.as_view(),name='firm-home'),
     path('<int:pk>/update',views.invoice_update,name='invoice_update22'),
+    path('search/',views.mySearch,name='invoice_search'),
+    path('search2/',SearchView.as_view(),name='invoice_search2'),
     path('<int:pk>/EditDisbursement',views.disbursementUpdate,name='DisburUpdate'),
     #path('<int:pk>/update',views.update,name='update22'),
     path('dashboard/',homeListView.as_view(),name='firm-home'),
@@ -41,3 +43,4 @@ urlpatterns = [
 
     
 ]
+handler404 = "invoice.views.page_not_found_view"

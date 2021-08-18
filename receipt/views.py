@@ -47,7 +47,7 @@ def ourReceipts(request):
 '''
 class ourReceiptsListView(ListView):
     model = receipts
-    paginate_by = 3
+    paginate_by = 5
     ordering=['-date_created'] 
     template_name = 'receipt/ourReceiptPage.html'
  	  

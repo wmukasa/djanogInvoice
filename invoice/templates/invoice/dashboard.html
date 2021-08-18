@@ -19,11 +19,13 @@
         <div class="col-12 text-left">
         <nav class="navbar navbar-light bg-light">
           <a class="btn btn-primary" href="{% url 'create-invoice3'%}" ><i class="fa fa-print"></i> CREATE NEW INVOICE</a>
-          <strong>Search For Reference number or Name to :{{ tag }}</strong>
-          <form class="form-inline" method="POST" action="# ">
+          <strong>Search For Reference number,Name to,Issue Date(Year-Month-Day) <br> Company Name :{{ tag }}</strong>
+          <form class="form-inline" method="POST" action="{% url 'invoice_search'%}">
+            {% csrf_token %}
             <input class="form-control mr-sm-2" type="text" name="tag" id="tag" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>
+
         </nav>
       </div>
       </div>
@@ -59,9 +61,30 @@
                       <td><a href="{% url 'proforma-details' inv.id %} ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
                     </tr>
                    {% endfor %}
+                   {% if no_results %}
+                          No results returned for <q>{{ no_results }}</q>
+                    {% else %}
+                        {% for p in results %}
+                            <tr>
+                            <td>{{p.ref_nwumber}}</td>
+                            <td>{{p.issue_date|date:"M d Y"}}</td>
+                            <td>{{p.name_to}}</td>
+                            <td>{{p.author.username}}</td>
+                            <td><a href="{% url 'invoice-details' p.id %}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
+                            <td><a href="{% url 'proforma-details' p.id %} ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td> 
+                          </tr>
+                        {% endfor %}
+                    {% endif %}
+
                   </tbody>
                 </table>           
-
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
               </div>
             </div>
           </div>

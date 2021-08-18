@@ -9,7 +9,7 @@ from django.template.loader import get_template,render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect,get_object_or_404
 from datetime import datetime,date
-
+from django.db.models import Q 
 #from .forms import invoiceCreateForm
 from django.views.generic import (ListView,DetailView,CreateView,
                                     DeleteView,UpdateView,View)
@@ -28,6 +28,7 @@ import os, sys, subprocess, platform
 import pdfkit
 from wkhtmltopdf.views import PDFTemplateView
 from django.forms import (formset_factory, modelformset_factory,inlineformset_factory)
+from django.template import RequestContext
 def _get_pdfkit_config():
 
     if platform.system() == 'Windows':
@@ -49,12 +50,29 @@ wk_options = {
         'margin-bottom': '0.1cm',
         'lowquality': None,
 }
+'''
+def handler404(request, *args, **argv):
+    response = render('errors/404.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+def handler500(request, *args, **argv):
+    response = render('errors/500.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
+'''
+def page_not_found_view(request, exception):
+    return render(request, 'errors/404.html', status=404)
+
+    
 @login_required 
 def login(request):
 	return render(request,'users/logout.html')
 class homeListView(LoginRequiredMixin,ListView):
     model = Invoice
-    paginate_by = 10
+    paginate_by = 5
     ordering=['-issue_date'] 
     template_name = 'invoice/dashboard.html'
 
@@ -64,7 +82,7 @@ class invoiceDetailView(LoginRequiredMixin,DetailView):
     template_name = 'invoice/invoice_detail.html'
     def get_absolute_url(self):
         return reverse('invoice-details', kwargs={'pk':self.pk})
-
+    
 class invoiceDView(LoginRequiredMixin,View):
     def get(self,request,pk, *args, **kwargs):
         inv_id = get_object_or_404(Invoice,pk=pk)
@@ -92,6 +110,48 @@ class invoiceDView(LoginRequiredMixin,View):
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have such an invoice")
             return redirect("/")
+@login_required 
+def mySearch(request):
+    template_name = 'invoice/dashboard.html'
+    if request.method == "POST":
+        query_name = request.POST.get('tag', None)
+        if query_name:
+            results = Invoice.objects.filter(Q(name_to__icontains=query_name)|Q( 
+                                                ref_nwumber__icontains=query_name)|Q(
+                                                issue_date__icontains=query_name)|Q(
+                                                company_name__icontains=query_name))
+            return render(request, template_name, {"results":results})
+
+        return render(request, template_name)
+   
+class SearchView(LoginRequiredMixin,ListView):  # taskları arama sonucu listeliyoruz
+    model = Invoice
+    template_name = 'invoice/dashboard.html'
+    paginate_by = 5
+    #context_object_name = 'task'
+    def get_queryset(self):
+        query_name = self.request.GET.get("tag", None)
+        if query_name:
+            results = Invoice.objects.filter(Q(name_to__icontains=query_name)|Q( 
+                                                ref_nwumber__icontains=query_name)|Q(
+                                                issue_date__icontains=query_name)|Q(
+                                                company_name__icontains=query_name))
+            return render(request, template_name, {"results":results})
+        return render(request, template_name)  
+
+@login_required 
+def mySearch2(request):
+    template_name = 'invoice/dashboard.html'
+
+    if request.method == "POST":
+        search_invoice = request.POST.get('tag', None)
+    #search_invoice=request.GET.get('tag')
+        if search_invoice:
+            results =Invoice.objects.filter(Q(name_to__icontains=search_invoice) | Q(ref_nwumber__icontains=search_invoice))   
+        else:
+            results = Invoice.objects.all().order_by("-issue_date")  
+        return render(request, template_name,{'results':results})
+
 @login_required
 def InvoiceCreate(request):
     return render(request,'invoice/createInvoice.html')
@@ -161,6 +221,9 @@ def create_invoice_with_items(request):
         'formset': formset,
 
     })
+
+
+
 class createInvoice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         bookform = InvoiceSecondModelForm()

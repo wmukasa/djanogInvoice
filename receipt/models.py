@@ -24,7 +24,9 @@ class receipts(models.Model):
 
     def __str__(self):
         return self.received_from
-
+    def __str__(self):
+        return self.receipt_number
+        
     def get_absolute_url(self):
         return reverse("receipt-details",kwargs={"pk":self.pk})
 

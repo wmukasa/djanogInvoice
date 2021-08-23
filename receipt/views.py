@@ -5,13 +5,13 @@ from django.shortcuts import render,get_object_or_404
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.urls import reverse
-from .forms import receiptCreateForm,receiptCreateModelForm
+from .forms import receiptCreateForm,receiptCreateModelForm,ReceiptCreat
 from .models import receipts
 from django_pdfkit import PDFView
 from .utils import render_to_pdf
 from django.template.loader import get_template
 from wkhtmltopdf.views import PDFTemplateResponse 
-
+from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import (ListView,DetailView,CreateView,View,
                                     DeleteView,UpdateView)
 import os, sys, subprocess, platform
@@ -57,11 +57,13 @@ class receiptDetailView(DetailView):
 
     def get_absolute_url(self):
         return reverse('receipt-details', kwargs={'pk':self.pk})
-
+#using this view to create receipt for this application
 class createReceiptView(View):
     def get(self,*args,**kwargs):
         #form
-        form =receiptCreateForm()
+        #form =receiptCreateForm()
+        form=ReceiptCreat()
+        #form =receiptCreateModelForm()
         context={
             'form':form
         }
@@ -268,3 +270,23 @@ def pdf(request):
     response = HttpResponse(pdf, content_type='application/pdf')
 
     return response  
+
+class receiptPDFView(LoginRequiredMixin,View):
+    def get(self,request,pk, *args, **kwargs):
+        rpt_id = get_object_or_404(receipts,pk=pk)
+        try:
+            rpt = receipts.objects.get(receipt_number=rpt_id)
+            context = {
+                'object': rpt,
+            }
+            template = get_template('receipt/receipt_pdf.html')
+            html = template.render(context)
+            pdf = pdfkit.from_string(html,False,configuration=_get_pdfkit_config(),options=wk_options)
+            response = HttpResponse(pdf)
+            response.headers['Content-Type']='application/pdf'
+            #response.headers['Content-Disposition']='inline; filename=TaxInvoice'+str(pk)+'.pdf'
+            #response = HttpResponse(pdf, content_type='application/pdf')
+            return response
+        except ObjectDoesNotExist:
+            messages.error(self.request,"You do not have such an receipt")
+            return redirect("/")

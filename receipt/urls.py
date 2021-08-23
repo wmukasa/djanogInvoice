@@ -7,7 +7,7 @@ from .views import (ourReceiptsListView,
                     createReceiptView,
                     createReceipt2View,
                     receiptPdf,
-                    usingwktohtml
+                    usingwktohtml,receiptPDFView
                     )
 from .import views
 from django_pdfkit import PDFView
@@ -47,7 +47,8 @@ urlpatterns = [
     #path('<int:pk>/pdf', receiptPdf.as_view(), name='receipt-pdf'),
     path('<int:pk>/pdf', PDFView.as_view(template_name='receipt/receipt_pdf.html'), name='my-pdf'),
     #using receiptPdf for pdf kit to get pdf
-    path('receiptPdf/',receiptPdf.as_view(),name='receipt-pdf'),
+    path('receiptPdf1/',receiptPdf.as_view(),name='receipt-pdf1'),
     path('wktopdf/',usingwktohtml.as_view(),name='wktopdf-pdf'),
     path('kit/', views.pdf,name='kit-pdf'),
+    path('<int:pk>/receiptPdf/',receiptPDFView.as_view(),name='receipt-pdf')
 ]

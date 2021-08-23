@@ -11,7 +11,7 @@
               <a class="btn btn-outline-secondary" href="{% url 'our_receipts' %}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Back</a>
           </form>
           <form method="POST" action="#">
-            <button class="btn btn-outline-warning" type="submit" id="saveReceipt">Download Receipt</button>&nbsp;
+            <a class="btn btn-outline-warning" href="{% url 'receipt-pdf' object.id%}">Download Receipt</a>&nbsp;
           </form>
         </nav>
         </div>
@@ -33,7 +33,7 @@
               <div class="col-4">
                 <h5 >RECEIPT</h5>
               </div>
-              <div class="col-4"><h8><b>Date:&nbsp;&nbsp;{{object.date_created}}</h8></b><br><b>Receipt No:&nbsp;&nbsp;{{object.receipt_number}}</b><br></div>
+              <div class="col-4"><h8><b>Date:&nbsp;&nbsp;{{object.date_created|date:"M d Y"}}</h8></b><br><b>Receipt No:&nbsp;&nbsp;{{object.receipt_number}}</b><br></div>
             </div>
               <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Received with thanks from:</label>
@@ -75,7 +75,7 @@
                 <div class="row mb-2">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Signature:</label>
                     <div class="col-sm-10">
-                      <input type="email" class="form-control" id="colFormLabel" placeholder="DigitalSignature Required" disabled="">
+                      <input type="email" class="form-control" id="colFormLabel" placeholder="Digital Signature Required" disabled="">
                       For:<b>Kamohoro,Kiboome&Kirunda Advocates</b>
                     </div>
                 </div>

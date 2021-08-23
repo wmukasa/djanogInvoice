@@ -60,7 +60,7 @@
                  {% for rpt in object_list %}
                     <tr>
                       <td>{{rpt.receipt_number}}</td>
-                      <td>{{rpt.date_created}}</td>
+                      <td>{{rpt.date_created|date:"M d Y" }}</td>
                       <td>{{rpt.received_from}}</td>
                       <td>{{rpt.author}}</td>
                       <td><a href="{% url 'receipt-details' rpt.id %}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View</a></td>
